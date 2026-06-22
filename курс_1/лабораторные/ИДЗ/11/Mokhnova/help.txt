@@ -1,0 +1,111 @@
+Модуль ОПЕРАЦИИ НАД ВЕКТОРАМИ
+	Vector
+Версия: 0.1
+
+#include "vector.h"
+
+Доступные функции
+- сложение Vector - Vector;
+- вычитание Vector - Vector;
+- умножение Vector - float;
+- скалярное умножение Vector - Vector;
+- длина;
+- координаты единичного вектора;
+
+Создание
+	Vector vector = Vector(cords, size);
+	
+	Атрибуты:
+	float[] cords - координаты вектора (массив чисел с плавающей точкой),
+	size_t size - размерность (длина массива coords)
+
+		Если size < длины массива, лишние элементы cords отбрасываются
+		Если size > 0, а cords пуст, ошибка std::invalid_argument
+
+- сложение Vector - Vector;
+	Vector add(Vector b);
+
+	Прибавляет к вектору вектор b той же длины, возвращает результирующий вектор.
+	Если векторы разной длины, возвращает Vector с пустыми координатами и размерностью 0.
+
+- вычитание Vector - Vector;
+	Vector minus(Vector b);
+
+	Вычитает из вектора вектор b той же длины, возвращает результирующий вектор.
+	Если векторы разной длины, возвращает Vector с пустыми координатами и размерностью 0.
+
+- умножение Vector - float;
+	Vector multiply(float a);
+
+	Умножает вектор на число a, возвращает полученное число.
+
+- скалярное умножение Vector - Vector;
+	float scalar(Vector b);
+
+	Скалярно перемножает вектор и вектор b той же длины, возвращает полученное число.
+	Если векторы разной длины, возвращает число Vector::invalid.
+
+- длина;
+	float length();
+
+	Возвращает длину вектора.
+
+- координаты единичного вектора;
+	Vector normal();
+
+	Возвращает вектор длины 1, коллинеарный вектору.
+
+
+Пример использования
+
+#include <iostream>
+#include "vector.h"
+using namespace std;
+
+int main() {
+    // 1. Создание векторов
+    float arr1[3]{ 3.0f, 4.0f, 0.0f };
+    float arr2[3]{ 1.0f, 0.0f, 5.0f };
+
+    // Создаем объекты Vector
+    Vector v1{ arr1, 3 };
+    Vector v2{ arr2, 3 };
+
+    // 2. Сложение векторов (Addition)
+    Vector vSum = v1.add(v2);
+
+    // 3. Вычитание векторов (Subtraction)
+    Vector vDiff = v1.minus(v2);
+
+    // 4. Умножение на скаляр (Scalar Multiplication)
+    Vector vMult = v1.multiply(2.5f);
+
+    // 5. Скалярное произведение (Dot Product)
+    float dotProduct = v1.scalar(v2);
+
+    // 6. Длина вектора (Magnitude/Length)
+    float len = v1.length();
+
+    // 7. Нормализация (Normal vector)
+    Vector vNorm = v1.normal();
+
+    // 8. Проверка на ошибки (разные размеры)
+    float arr3[2] { 1.0f, 2.0f };
+    Vector v3(arr3, 2);
+    Vector vError = v1.add(v3);
+    // Вернется Vector(nullptr, 0). 
+
+    if (vError.size == 0) {
+        cout << "Ошибка операции: векторы разной размерности." << endl;
+    }
+    else {
+
+        for (int i{}; i < vError.size; i++)
+        {
+            cout << vError.cords[i] << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
